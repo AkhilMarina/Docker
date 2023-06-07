@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Player Data - Dota 2</title>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2 {
+      color: #333;
+      margin: 20px;
+      text-align: center;
+    }
+
+    #playerInfo {
+      width: 90%;
+      max-width: 800px;
+      margin: auto;
+      padding: 20px;
+      background-color: white;
+      border-radius: 5px;
+      box-shadow: 0px 0px 5px rgba(0,0,0,0.1);
+    }
+
+    .player-info-heading {
+      font-size: 24px;
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+    }
+
+    td {
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    td:nth-child(odd) {
+      background-color: #f9f9f9;
+    }
+
+    img {
+      max-width: 100px;
+      border-radius: 50%;
+      display: block;
+      margin: 10px auto;
+    }
+    
+    a {
+      color: #007BFF;
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h2>Player Information</h2>
+  <div id="playerInfo">Loading...</div>
+
+  <script>
+  $(document).ready(function(){
+    var playerID = prompt("Please enter a player ID"); // prompt the user for the player ID
+
+    if (playerID != null) {
+      // Fetch player data
+      $.get("https://api.opendota.com/api/players/" + playerID, function(data) {
+        var playerInfo = "<table>";
+        playerInfo += "<tr><td class='player-info-heading' colspan='2'><img src='" + data.profile.avatarfull + "'/><br><strong>" + data.profile.personaname + "</strong></td></tr>";
+        playerInfo += "<tr><td>Steam ID:</td><td>" + data.profile.steamid + "</td></tr>";
+        playerInfo += "<tr><td>Profile URL:</td><td><a href='" + data.profile.profileurl + "'>Profile Link</a></td></tr>";
+        playerInfo += "<tr><td>MMR Estimate:</td><td>" + data.mmr_estimate.estimate + "</td></tr>";
+        playerInfo += "<tr><td>Competitive Rank:</td><td>" + data.competitive_rank + "</td></tr>";
+        playerInfo += "<tr><td>Leaderboard Rank:</td><td>" + data.leaderboard_rank + "</td></tr>";
+        playerInfo += "<tr><td>Last Login:</td><td>" + data.profile.last_login + "</td></tr>";
+        playerInfo += "<tr><td>Country Code:</td><td>" + data.profile.loccountrycode + "</td></tr>";
+        playerInfo += "</table>";
+        $("#playerInfo").html(playerInfo);
+      });
+
+      // Fetch recent matches of player
+      $.get("https://api.opendota.com/api/players/" + playerID + "/matches", function(data) {
+        // ... (rest of your code)
+      });
+    } else {
+      alert("No player ID provided. Please refresh the page and enter a valid player ID.");
+    }
+  });
+  </script>
+</body>
+</html>
+
